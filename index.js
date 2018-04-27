@@ -5,7 +5,7 @@
 
 // schema
 
-const { buildSchema } = require('graphql');
+const {buildSchema} = require('graphql');
 
 const schema = buildSchema(`
   type Query {
@@ -13,7 +13,7 @@ const schema = buildSchema(`
     answer: Int
     counter: Int
     first3Primes: [Int]
-    ricky: Person
+    person(id: Int): Person
   }
   type Mutation {
     incrementCounter: Int
@@ -26,47 +26,64 @@ const schema = buildSchema(`
 `)
 
 let counterValue = 1;
-let person = {
-  firstName: "ricky",
-  lastName: "d",
-  email: "ricky.d@mail.com"
-}
+let people = [
+  {
+    id: 1,
+    firstName: "ricky1",
+    lastName: "d",
+    email: "ricky.d@mail.com"
+
+  }, {
+    id: 2,
+    firstName: "ricky2",
+    lastName: "d",
+    email: "ricky.d@mail.com"
+
+  }, {
+    id: 3,
+    firstName: "ricky3",
+    lastName: "d",
+    email: "ricky.d@mail.com"
+
+  }
+]
 
 const root = {
   hello: () => "Hello World..",
   answer: () => 42, //trailing comma (valid in modern javascript)
   counter: () => counterValue,
-  first3Primes: () => [2,3,5],
-  ricky: () => person,
-  incrementCounter: () => ++counterValue,
+  first3Primes: () => [
+    2, 3, 5
+  ],
+  person: (args) => {
+    return people.find(person => person.id === args.id)
+  },
+  incrementCounter: () => ++counterValue
 };
 
 // use mutation to manipulate data instead of inside the query
-
 
 const graphqlHTTP = require('express-graphql');
 const express = require('express');
 const server = express();
 
-server.use('/', graphqlHTTP({  // 'use' does both GET and POST
+server.use('/', graphqlHTTP({ // 'use' does both GET and POST
   schema, // shorthand for schema: schema
   rootValue: root,
   graphiql: true
 }))
 
-server.listen( 3000, () => {
+server.listen(3000, () => {
   console.log("Server is running...")
 })
 
-
-
-// // interface
+//  interface
 //
-// /// query
+// / query
 // const query = process.argv[2];
 //
 // graphql(schema, query, root)
-//   // promise
+//    promise
 //   .then(response => {
 //     console.log(response);
 //   })
