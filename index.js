@@ -4,27 +4,7 @@
 // npx nodemon index.js
 
 // schema
-
-const {buildSchema} = require('graphql');
-
-const schema = buildSchema(`
-  type Query {
-    hello: String
-    answer: Int
-    counter: Int
-    first3Primes: [Int]
-    person(id: Int): Person
-    people: [Person]
-  }
-  type Mutation {
-    incrementCounter: Int
-  }
-  type Person {
-    firstName: String
-    lastName: String
-    email: String
-  }
-`)
+const schema = require('./schema');
 
 let counterValue = 1;
 
@@ -54,6 +34,19 @@ let getPeople = () => {
       ]
     )
   })
+}
+
+// dont make multiple db calls
+// batch ... cache
+let getFriends = (personId) => {
+  // list of friends
+}
+
+// don't let javascript find the person
+// define function on backend to find it
+let getPerson = (personId) => {
+  // db
+  // db.collection('people').find({id: personId})
 }
 
 
