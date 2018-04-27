@@ -14,6 +14,7 @@ const schema = buildSchema(`
     counter: Int
     first3Primes: [Int]
     person(id: Int): Person
+    people: [Person]
   }
   type Mutation {
     incrementCounter: Int
@@ -26,27 +27,35 @@ const schema = buildSchema(`
 `)
 
 let counterValue = 1;
-let people = [
-  {
-    id: 1,
-    firstName: "ricky1",
-    lastName: "d",
-    email: "ricky.d@mail.com"
 
-  }, {
-    id: 2,
-    firstName: "ricky2",
-    lastName: "d",
-    email: "ricky.d@mail.com"
+let getPeople = () => {
+  return new Promise((resolve, reject) => {
+    resolve(
+      [
+        {
+          id: 1,
+          firstName: "ricky1",
+          lastName: "d",
+          email: "ricky.d@mail.com"
 
-  }, {
-    id: 3,
-    firstName: "ricky3",
-    lastName: "d",
-    email: "ricky.d@mail.com"
+        }, {
+          id: 2,
+          firstName: "ricky2",
+          lastName: "d",
+          email: "ricky.d@mail.com"
 
-  }
-]
+        }, {
+          id: 3,
+          firstName: "ricky3",
+          lastName: "d",
+          email: "ricky.d@mail.com"
+
+        }
+      ]
+    )
+  })
+}
+
 
 const root = {
   hello: () => "Hello World..",
@@ -55,10 +64,12 @@ const root = {
   first3Primes: () => [
     2, 3, 5
   ],
-  person: (args) => {
+  person: async (args) => {
+    const people = await getPeople()
     return people.find(person => person.id === args.id)
   },
-  incrementCounter: () => ++counterValue
+  incrementCounter: () => ++counterValue,
+  people: () => getPeople(),
 };
 
 // use mutation to manipulate data instead of inside the query
