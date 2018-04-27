@@ -22,9 +22,10 @@ const graphqlHTTP = require('express-graphql');
 const express = require('express');
 const server = express();
 
-server.get('/', graphqlHTTP({
+server.use('/', graphqlHTTP({  // 'use' does both GET and POST
   schema, // shorthand for schema: schema
-  rootValue: root
+  rootValue: root,
+  graphiql: true
 }))
 
 server.listen( 3000, () => {
