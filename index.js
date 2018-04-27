@@ -12,18 +12,32 @@ const schema = buildSchema(`
     hello: String
     answer: Int
     counter: Int
+    first3Primes: [Int]
+    ricky: Person
   }
   type Mutation {
     incrementCounter: Int
   }
+  type Person {
+    firstName: String
+    lastName: String
+    email: String
+  }
 `)
 
 let counterValue = 1;
+let person = {
+  firstName: "ricky",
+  lastName: "d",
+  email: "ricky.d@mail.com"
+}
 
 const root = {
   hello: () => "Hello World..",
   answer: () => 42, //trailing comma (valid in modern javascript)
   counter: () => counterValue,
+  first3Primes: () => [2,3,5],
+  ricky: () => person,
   incrementCounter: () => ++counterValue,
 };
 
