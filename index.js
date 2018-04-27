@@ -3,7 +3,7 @@
 
 // schema
 
-const { graphql, buildSchema } = require('graphql');
+const { buildSchema } = require('graphql');
 
 const schema = buildSchema(`
   type Query {
@@ -14,12 +14,18 @@ const schema = buildSchema(`
 
 const root = {
   hello: () => "Hello World..",
-  answer: () => 42
+  answer: () => 42, //trailing comma (valid in modern javascript)
 };
 
 
+const graphqlHTTP = require('express-graphql');
 const express = require('express');
 const server = express();
+
+server.get('/', graphqlHTTP({
+  schema, // shorthand for schema: schema
+  rootValue: root
+}))
 
 server.listen( 3000, () => {
   console.log("Server is running...")
